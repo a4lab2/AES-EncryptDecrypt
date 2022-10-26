@@ -88,5 +88,7 @@ func decrypt(encryptedString string, keyString string) string {
 }
 
 func main() {
-
+	// get data to use functions on using cmd
+	main.go -e "sample plaintext"
+	main.go -d "sample ciphertext"
 }
