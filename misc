@@ -1,0 +1,8 @@
+Library used:
+            newCipher(key []byte) cipher.Block,error
+            Generate a 32 byte key which we’ll use to encrypt and decrypt data.
+
+-   key (32-bytes for AES-256 encryption)
+-   nonce (a random no., only used only once)
+-   data to encrypt - plaintext in this example
+
