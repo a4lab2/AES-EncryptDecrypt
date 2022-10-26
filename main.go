@@ -20,9 +20,17 @@ func generateKey_String() string {
 }
 
 // Overkill not really neccesary
-// func convertKeyToByte() {
+func convertByteToString(byteTochnage []byte) string {
+	return hex.EncodeToString(byteTochnage)
+}
 
-// }
+func convertStringToByte(stringTochange string) ([]byte, error) {
+	b, err := hex.DecodeString(stringTochange)
+	if err != nil {
+		panic(err)
+	}
+	return b, nil
+}
 
 func encryptS(stringToEncrypt string) []byte {
 	keyString := generateKey_String()
@@ -46,14 +54,36 @@ func encryptS(stringToEncrypt string) []byte {
 		panic(err)
 	}
 
-	encryptextText := aesGCM.Seal(nonce, nonce, plaintext, nil)
+	encryptedText := aesGCM.Seal(nonce, nonce, plaintext, nil)
 
-	return encryptextText
+	return encryptedText
 
 }
 
 // decrypt
-func decrypt(cipherText []byte) {
+func decrypt(encryptedString string, keyString string) string {
+	// decode string to byte
+	key, _ := hex.DecodeString(keyString)
+	encryptedText, _ := hex.DecodeString(encryptedString)
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err)
+	}
+	aesGCM, err := cipher.NewGCM(block)
+
+	if err != nil {
+		panic(err)
+
+	}
+
+	nonceSize := aesGCM.NonceSize()
+
+	nonce, ciphertext := encryptedText[:nonceSize], encryptedText[nonceSize:]
+
+	plaintext, err := aesGCM.Open(nil, nonce, ciphertext, nil)
+
+	return convertByteToString(plaintext)
 
 }
 
